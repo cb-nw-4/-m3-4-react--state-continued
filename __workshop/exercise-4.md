@@ -2,7 +2,7 @@
 
 Amazon and other websites make it easy to find where your search term is within the suggestion. For example, see how Amazon bolds the rest of their suggestion?
 
-![Amazon bolding suggestions](./__lecture/assets/amazon.png)
+![Amazon bolding suggestions](../__lecture/assets/amazon.png)
 
 Let's do the same thing. We'll need to split the matched suggestion's title into 2 pieces, to do something like this:
 
@@ -18,6 +18,10 @@ const Prediction = styled.span`
   font-weight: bold;
 `;
 ```
+
+> **Why not use a `<strong>` tag?**
+>
+> The `strong` HTML element is meant to imply that a specific word in a sentence is very important and should be stressed. In this case, the bold lettering is purely a cosmetic effect, to make it easier to scan. The correct approach is to use a `span`, which doesn't communicate anything to search engines and screen-reader users.
 
 In your app, both of these will be variables:
 

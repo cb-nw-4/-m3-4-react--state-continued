@@ -30,7 +30,7 @@ Given a title "The Girls":
 
 Start by trying to render a list of the matches below the input:
 
-![working demo](./__lecture/assets/unstyled-filtered-items.png)
+![working demo](../__lecture/assets/unstyled-filtered-items.png)
 
 Most of these results have the word "the" in them explicitly. The third item, "Technically Wrong", has it hidden in the word "oTHEr".
 
