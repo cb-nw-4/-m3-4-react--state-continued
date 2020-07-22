@@ -32,13 +32,13 @@ Your goal will be to find the index of that cross-over point (in this example, i
 
 We should see the "prediction" part of the string bolded:
 
-![working demo](./__lecture/assets/bolded.png)
+![working demo](../__lecture/assets/bolded.png)
 
 > HINT: there are a number of ways to solve this, but you can use `indexOf` and `slice` to create the two string segments
 
 Finally, we also want to show the associated categories with each item:
 
-![working demo](./__lecture/assets/category-render.png)
+![working demo](../__lecture/assets/category-render.png)
 
 We have all of the category data in our `data.js` file, imported in `App.js`. Pass the full set of categories as a prop to `Typeahead`.
 
