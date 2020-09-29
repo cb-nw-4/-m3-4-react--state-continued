@@ -25,4 +25,4 @@ Let's build one together!
 - Works with a screen reader
 ```
 
-[Go!](https://codesandbox.io/s/toggle-activity-p4fsc)
+[Go!](https://codesandbox.io/s/toggle-activity-oyg83)
