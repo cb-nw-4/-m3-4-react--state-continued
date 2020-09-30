@@ -1,4 +1,4 @@
-# Workshop: Typeahead
+# 3-4 Typeahead
 
 This workshop challenges you to build a common reusable component: The **Typeahead**.
 
