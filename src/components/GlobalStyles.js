@@ -50,6 +50,7 @@ export default createGlobalStyle`
         border: 0;
         font-size: 100%;
         vertical-align: baseline;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     }
     /* HTML5 display-role reset for older browsers */
     article, aside, details, figcaption, figure,
