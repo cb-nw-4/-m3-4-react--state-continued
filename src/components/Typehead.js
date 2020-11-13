@@ -5,12 +5,12 @@ import Suggestion from './Suggestion';
 
 let matchedSuggestions = [];
 
-const Typehead = ({suggestions, handleSelect}) =>{
+const Typehead = ({suggestions, handleSelect, categories}) =>{
     const [inputText, setInputText] = useState("");
     let key =0;
+    let category = "";
 
     const findSuggestions = (ev)=>{
-
         setInputText(ev.target.value);
         
         matchedSuggestions = [];
@@ -37,7 +37,13 @@ const Typehead = ({suggestions, handleSelect}) =>{
         {(matchedSuggestions.length>0)&&<SuggestionBox>
             {
                 matchedSuggestions.map((suggestion)=>{
-                    return <Suggestion key={key++} suggestion={suggestion} handleSelect={handleSelect}/>
+                    return <Suggestion 
+                    key={key++} 
+                    suggestion={suggestion} 
+                    handleSelect={handleSelect} 
+                    input={inputText}
+                    categories={categories}
+                    />
                 })
             }
         </SuggestionBox>}
@@ -74,7 +80,5 @@ const SuggestionBox = styled.ul`
     margin-top: 6px;
     box-shadow: 1px 1px 4px grey;
     text-align: left;
-
 `
-
 export default Typehead;

@@ -1,10 +1,10 @@
 import React from 'react';
 
 import GlobalStyles from './GlobalStyles';
-import data from '../data';
+import data, { categories } from '../data';
 import Typehead from './Typehead';
 
-const App = (props) => {
+const App = () => {
   return (
     <>
       <GlobalStyles />
@@ -12,6 +12,7 @@ const App = (props) => {
       <Typehead 
         suggestions={data.books}
         handleSelect={(suggestion)=>{window.alert(suggestion)}}
+        categories={categories}
       />
     </>
   );
