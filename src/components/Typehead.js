@@ -34,13 +34,13 @@ const Typehead = ({suggestions, handleSelect}) =>{
             />
             <ClearButton onClick={()=>setInputText('')}>Clear</ClearButton>
         </form>
-        <SuggestionBox>
+        {(matchedSuggestions.length>0)&&<SuggestionBox>
             {
                 matchedSuggestions.map((suggestion)=>{
                     return <Suggestion key={key++} suggestion={suggestion} handleSelect={handleSelect}/>
                 })
             }
-        </SuggestionBox>
+        </SuggestionBox>}
     </Wrapper>
     );
 };
