@@ -7,7 +7,7 @@ import App from './App';
 const UserInput = styled.input` 
   margin: 20px 10px;;
   height: 35px;
-  width: 200px;
+  width: 300px;
   border: 1px solid lightgray;
   border-radius: 3px;
 `
