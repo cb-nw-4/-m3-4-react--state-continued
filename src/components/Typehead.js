@@ -37,7 +37,7 @@ const Typehead = ({suggestions, handleSelect}) =>{
         <SuggestionBox>
             {
                 matchedSuggestions.map((suggestion)=>{
-                    return <Suggestion key={key++} suggestion={suggestion}/>
+                    return <Suggestion key={key++} suggestion={suggestion} handleSelect={handleSelect}/>
                 })
             }
         </SuggestionBox>

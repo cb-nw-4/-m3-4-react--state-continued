@@ -1,9 +1,9 @@
 import React from 'react';
 import styled from 'styled-components';
 
-const Suggestion = ({suggestion}) =>{
+const Suggestion = ({suggestion, handleSelect}) =>{
     return (
-        <SuggestionItem>{suggestion.title}</SuggestionItem>
+        <SuggestionItem onClick={()=>handleSelect(suggestion.title)}>{suggestion.title}</SuggestionItem>
     );
 };
 
@@ -18,6 +18,5 @@ const SuggestionItem = styled.li`
         cursor: pointer;
     }
 `
-
 
 export default Suggestion;
