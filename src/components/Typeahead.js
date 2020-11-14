@@ -29,12 +29,16 @@ export const Typeahead = ({ suggestions, handleSelect, category }) => {
                 return;
               }
               case "ArrowUp": {
-                setSelectedSuggestionIndex(selectedSuggestionIndex - 1);
-                return
+                if (selectedSuggestionIndex > 0) {
+                  setSelectedSuggestionIndex(selectedSuggestionIndex - 1);
+                }
+                return;
               }
               case "ArrowDown": {
-                setSelectedSuggestionIndex(selectedSuggestionIndex + 1);
-                return
+                if (selectedSuggestionIndex < filteredArr.length - 1) {
+                  setSelectedSuggestionIndex(selectedSuggestionIndex + 1);
+                }
+                return;
               }
             }
           }}
@@ -50,13 +54,13 @@ export const Typeahead = ({ suggestions, handleSelect, category }) => {
             const firstHalf = book.title.slice(0, wordIndex + InputText.length);
             const secondHalf = book.title.slice(wordIndex + InputText.length);
             const categoryBookId = book.categoryId;
-            console.log(selectedSuggestionIndex, i)
+            console.log(selectedSuggestionIndex, i);
             return (
               <Li
                 selected={selectedSuggestionIndex === i}
                 key={book.id}
                 onMouseEnter={() => {
-                  setSelectedSuggestionIndex(i)
+                  setSelectedSuggestionIndex(i);
                 }}
                 onClick={() => {
                   handleSelect(book.title);
@@ -85,7 +89,6 @@ const Italics = styled.span`
   }
 `;
 
-
 const Span = styled.span`
   font-weight: bold;
 `;
@@ -101,9 +104,11 @@ const Ul = styled.ul`
 
 const Li = styled.li`
   padding: 0.5rem;
-  ${(props) => (props.selected && css `
-    background-color: lightyellow;
-  `)}
+  ${(props) =>
+    props.selected &&
+    css`
+      background-color: lightyellow;
+    `}
 `;
 
 const Wrapper = styled.div`
