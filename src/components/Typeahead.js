@@ -8,8 +8,7 @@ import styled from 'styled-components';
 const Typeahead = ({suggestions, handleSelect}) => {
     const [value, setValue] = React.useState('');
 
-    let firstHalf; 
-    let  secondHalf;
+    let firstHalf, secondHalf, categoryName;
 
     const matchedSuggestions = suggestions.filter(suggestion =>{
 
@@ -22,8 +21,9 @@ const Typeahead = ({suggestions, handleSelect}) => {
         
     });
 
-    console.log(matchedSuggestions)
-
+    let categories = data.categories;
+    
+  
 
 
     return ( 
@@ -54,21 +54,23 @@ const Typeahead = ({suggestions, handleSelect}) => {
             
                         firstHalf = suggestion.title.slice(0, indexOfValue + value.length);
                         secondHalf = suggestion.title.slice(indexOfValue + value.length);
-
-
+                    
                         return(
                             <Suggestion
                                 key={suggestion.id}
                                 onClick={()=> handleSelect(suggestion.title)}
                             >
                                 <span>
-                                    
                                     {firstHalf}
                                     <Prediction>
-                                        {secondHalf}
+                                        {secondHalf} in 
                                     </Prediction>
-                                </span> 
-                            
+
+                                    <span>
+                                        {categories[suggestion.categoryId].name}
+                                    </span>
+                                </span>
+                                 
                                 
                             </Suggestion>
                         )
@@ -114,13 +116,19 @@ const Ul = styled.ul`
     -webkit-box-shadow: -5px 8px 29px 26px rgba(194,194,194,0.64);
     -moz-box-shadow: -5px 8px 29px 26px rgba(194,194,194,0.64);
     margin: 10px;
-    border: 2px solid white;
+    border: none;
+    width: 60%;
 `
 
 
 const Suggestion = styled.li`
-    padding: 10px;
+    padding: 20px;
     margin: 10px;
+
+    & span :last-child{
+        color: purple;
+        font-style: italic;
+    }
     
     &:hover{
         background-color:  #ffff99;
@@ -130,5 +138,6 @@ const Suggestion = styled.li`
 const Prediction = styled.span`
     font-weight: bold;
 `
+
 
 export default Typeahead;
