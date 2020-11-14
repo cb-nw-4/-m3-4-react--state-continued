@@ -8,20 +8,22 @@ import styled from 'styled-components';
 const Typeahead = ({suggestions, handleSelect}) => {
     const [value, setValue] = React.useState('');
 
-    
+    let firstHalf; 
+    let  secondHalf;
 
     const matchedSuggestions = suggestions.filter(suggestion =>{
 
-
-
-        let containValue = suggestion.title.toLowerCase().includes(value);
-        
+        let containValue = suggestion.title.toLowerCase().includes(value);        
 
         if(value.length >=2 && containValue){
+            
             return (suggestion.title)
         }
         
     });
+
+    console.log(matchedSuggestions)
+
 
 
     return ( 
@@ -44,18 +46,35 @@ const Typeahead = ({suggestions, handleSelect}) => {
                     clear
                 </Button>
             </div>
-            <Ul>
-                {matchedSuggestions.map((suggestion) =>{
-                    return(
-                        <Suggestion
-                            key={suggestion.id}
-                            onClick={()=> handleSelect(suggestion.title)}
-                        >
-                            {suggestion.title}
-                        </Suggestion>
-                    )
-                })}
-            </Ul>
+
+            {matchedSuggestions.length > 0 &&
+                <Ul>
+                    {matchedSuggestions.map((suggestion) =>{
+                        let indexOfValue = suggestion.title.toLowerCase().indexOf(value);
+            
+                        firstHalf = suggestion.title.slice(0, indexOfValue + value.length);
+                        secondHalf = suggestion.title.slice(indexOfValue + value.length);
+
+
+                        return(
+                            <Suggestion
+                                key={suggestion.id}
+                                onClick={()=> handleSelect(suggestion.title)}
+                            >
+                                <span>
+                                    
+                                    {firstHalf}
+                                    <Prediction>
+                                        {secondHalf}
+                                    </Prediction>
+                                </span> 
+                            
+                                
+                            </Suggestion>
+                        )
+                    })}
+                </Ul>
+            }
 
     </Wrapper>
     );
@@ -91,9 +110,11 @@ const Input = styled.input`
 `
 
 const Ul = styled.ul`
-    -webkit-box-shadow: 0px 5px 10px 8px rgba(221,221,221,0.75); 
-    box-shadow: 0px 5px 10px 8px rgba(221,221,221,0.75);
+    box-shadow: -5px 8px 29px 26px rgba(194,194,194,0.64);
+    -webkit-box-shadow: -5px 8px 29px 26px rgba(194,194,194,0.64);
+    -moz-box-shadow: -5px 8px 29px 26px rgba(194,194,194,0.64);
     margin: 10px;
+    border: 2px solid white;
 `
 
 
@@ -104,8 +125,10 @@ const Suggestion = styled.li`
     &:hover{
         background-color:  #ffff99;
     }
+`
 
-
+const Prediction = styled.span`
+    font-weight: bold;
 `
 
 export default Typeahead;
