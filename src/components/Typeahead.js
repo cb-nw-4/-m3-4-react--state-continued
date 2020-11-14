@@ -1,29 +1,25 @@
 import React from 'react';
 import data from '../data'
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 
 
 
 
 const Typeahead = ({suggestions, handleSelect}) => {
     const [value, setValue] = React.useState('');
-
-    let firstHalf, secondHalf, categoryName;
+    const [selectedSUggestionIndex, setSelectedSuggestionIndex] = React.useState(0);
+    
+    let firstHalf, secondHalf;
+    let categories = data.categories;
 
     const matchedSuggestions = suggestions.filter(suggestion =>{
 
         let containValue = suggestion.title.toLowerCase().includes(value);        
-
         if(value.length >=2 && containValue){
-            
             return (suggestion.title)
         }
         
     });
-
-    let categories = data.categories;
-    
-  
 
 
     return ( 
@@ -35,8 +31,21 @@ const Typeahead = ({suggestions, handleSelect}) => {
                     value={value}
                     onChange={(ev) =>setValue(ev.target.value)}
                     onKeyDown={(ev) =>{
-                        if(ev.key ==='Enter'){
-                            handleSelect(ev.target.value)
+
+                        switch(ev.key){
+                            case 'Enter':{
+                                handleSelect(ev.target.value);
+                                return;
+                            }
+                            case 'ArrowUp':{
+                                setSelectedSuggestionIndex(selectedSUggestionIndex -1);
+                                return;
+
+                            }
+                            case 'ArrowDown':{
+                                setSelectedSuggestionIndex(selectedSUggestionIndex + 1);
+                                return;
+                            }
                         }
                     }}
                 />
@@ -49,7 +58,7 @@ const Typeahead = ({suggestions, handleSelect}) => {
 
             {matchedSuggestions.length > 0 &&
                 <Ul>
-                    {matchedSuggestions.map((suggestion) =>{
+                    {matchedSuggestions.map((suggestion, i) =>{
                         let indexOfValue = suggestion.title.toLowerCase().indexOf(value);
             
                         firstHalf = suggestion.title.slice(0, indexOfValue + value.length);
@@ -59,6 +68,14 @@ const Typeahead = ({suggestions, handleSelect}) => {
                             <Suggestion
                                 key={suggestion.id}
                                 onClick={()=> handleSelect(suggestion.title)}
+                            
+                                // className= {selectedSUggestionIndex === i ? "selected" : null }
+                                onMouseOver={() => {
+                                    setSelectedSuggestionIndex(i)
+                                }}
+
+                                selected= {selectedSUggestionIndex === i}
+                
                             >
                                 <span>
                                     {firstHalf}
@@ -70,8 +87,6 @@ const Typeahead = ({suggestions, handleSelect}) => {
                                         {categories[suggestion.categoryId].name}
                                     </span>
                                 </span>
-                                 
-                                
                             </Suggestion>
                         )
                     })}
@@ -125,14 +140,22 @@ const Suggestion = styled.li`
     padding: 20px;
     margin: 10px;
 
+    &.selected {
+        background: hsla(50deg, 100%, 80%, 0.25);
+    }
+
+
     & span :last-child{
         color: purple;
         font-style: italic;
     }
-    
-    &:hover{
-        background-color:  #ffff99;
-    }
+
+    ${(props) => {
+        return props.selected && css`
+            background: hsla(50deg, 100%, 80%, 0.25);
+        `
+    } }
+
 `
 
 const Prediction = styled.span`
