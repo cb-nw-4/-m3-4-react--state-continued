@@ -11,6 +11,7 @@ const App = (props) => {
 
       <Typeahead
         suggestions={data.books}
+        category={data.categories}
         handleSelect={(suggestion) => {
           window.alert(suggestion);
         }}
@@ -20,3 +21,5 @@ const App = (props) => {
 };
 
 export default App;
+
+// 

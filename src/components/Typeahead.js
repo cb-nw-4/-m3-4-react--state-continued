@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 
-export const Typeahead = ({ suggestions, handleSelect }) => {
+export const Typeahead = ({ suggestions, handleSelect, category }) => {
   const [InputText, setInputText] = useState("");
   const filteredArr = suggestions.filter((book) => {
     const bookLowerCase = book.title.toLowerCase();
@@ -11,6 +11,9 @@ export const Typeahead = ({ suggestions, handleSelect }) => {
       return true;
     }
   });
+  // const firstHalf = InputText
+  // const secondHalf =
+
   return (
     <Wrapper>
       <ButtonWrapper>
@@ -31,6 +34,13 @@ export const Typeahead = ({ suggestions, handleSelect }) => {
       {InputText.length > 2 && filteredArr.length > 0 && (
         <Ul>
           {filteredArr.map((book) => {
+            const wordIndex = book.title
+              .toLowerCase()
+              .indexOf(InputText.toLowerCase());
+            const firstHalf = book.title.slice(0, wordIndex + InputText.length);
+            const secondHalf = book.title.slice(wordIndex + InputText.length);
+            const categoryBookId = book.categoryId
+        
             return (
               <Li
                 key={book.id}
@@ -38,7 +48,12 @@ export const Typeahead = ({ suggestions, handleSelect }) => {
                   handleSelect(book.title);
                 }}
               >
-                {book.title}
+                {firstHalf}
+                <Span>{secondHalf}</Span>
+                <Italics>
+                  {" "}
+                  in <p>{category[categoryBookId].name}</p>
+                </Italics>
               </Li>
             );
           })}
@@ -47,6 +62,18 @@ export const Typeahead = ({ suggestions, handleSelect }) => {
     </Wrapper>
   );
 };
+
+const Italics = styled.span`
+  font-style: italic;
+  p {
+    color: purple;
+    display: inline-block;
+  }
+`;
+
+const Span = styled.span`
+  font-weight: bold;
+`;
 
 const Ul = styled.ul`
   position: relative;
