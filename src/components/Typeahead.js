@@ -73,15 +73,19 @@ const Typeahead = ({suggestions, handleSelect}) => {
                                 onMouseOver={() => {
                                     setSelectedSuggestionIndex(i)
                                 }}
-
+                                
                                 selected= {selectedSUggestionIndex === i}
                 
                             >
                                 <span>
                                     {firstHalf}
                                     <Prediction>
-                                        {secondHalf} in 
+                                        {secondHalf}
                                     </Prediction>
+
+                                    <span className='spaceIn'>
+                                        in
+                                    </span>
 
                                     <span>
                                         {categories[suggestion.categoryId].name}
@@ -132,18 +136,23 @@ const Ul = styled.ul`
     -moz-box-shadow: -5px 8px 29px 26px rgba(194,194,194,0.64);
     margin: 10px;
     border: none;
-    width: 60%;
+    width: 50%;
 `
 
 
 const Suggestion = styled.li`
     padding: 20px;
+    line-height: 1.5em;
     margin: 10px;
 
     &.selected {
         background: hsla(50deg, 100%, 80%, 0.25);
     }
 
+    .spaceIn{
+        padding-left: 2px;
+        padding-right: 2px;
+    }
 
     & span :last-child{
         color: purple;
