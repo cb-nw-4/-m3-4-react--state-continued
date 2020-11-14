@@ -1,8 +1,9 @@
 import React, { useState } from "react";
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 
 export const Typeahead = ({ suggestions, handleSelect, category }) => {
   const [InputText, setInputText] = useState("");
+  const [selectedSuggestionIndex, setSelectedSuggestionIndex] = useState(0);
   const filteredArr = suggestions.filter((book) => {
     const bookLowerCase = book.title.toLowerCase();
     const typedLowerCase = InputText.toLowerCase();
@@ -11,8 +12,6 @@ export const Typeahead = ({ suggestions, handleSelect, category }) => {
       return true;
     }
   });
-  // const firstHalf = InputText
-  // const secondHalf =
 
   return (
     <Wrapper>
@@ -24,26 +23,41 @@ export const Typeahead = ({ suggestions, handleSelect, category }) => {
             setInputText(ev.target.value);
           }}
           onKeyDown={(ev) => {
-            if (ev.key === "Enter") {
-              handleSelect(ev.target.value);
+            switch (ev.key) {
+              case "Enter": {
+                handleSelect(ev.target.value);
+                return;
+              }
+              case "ArrowUp": {
+                setSelectedSuggestionIndex(selectedSuggestionIndex - 1);
+                return
+              }
+              case "ArrowDown": {
+                setSelectedSuggestionIndex(selectedSuggestionIndex + 1);
+                return
+              }
             }
           }}
         ></Input>
         <Button onClick={() => setInputText("")}>Clear</Button>
       </ButtonWrapper>
-      {InputText.length > 2 && filteredArr.length > 0 && (
+      {InputText.length > 1 && filteredArr.length > 0 && (
         <Ul>
-          {filteredArr.map((book) => {
+          {filteredArr.map((book, i) => {
             const wordIndex = book.title
               .toLowerCase()
               .indexOf(InputText.toLowerCase());
             const firstHalf = book.title.slice(0, wordIndex + InputText.length);
             const secondHalf = book.title.slice(wordIndex + InputText.length);
-            const categoryBookId = book.categoryId
-        
+            const categoryBookId = book.categoryId;
+            console.log(selectedSuggestionIndex, i)
             return (
               <Li
+                selected={selectedSuggestionIndex === i}
                 key={book.id}
+                onMouseEnter={() => {
+                  setSelectedSuggestionIndex(i)
+                }}
                 onClick={() => {
                   handleSelect(book.title);
                 }}
@@ -71,6 +85,7 @@ const Italics = styled.span`
   }
 `;
 
+
 const Span = styled.span`
   font-weight: bold;
 `;
@@ -86,10 +101,9 @@ const Ul = styled.ul`
 
 const Li = styled.li`
   padding: 0.5rem;
-  &:hover {
+  ${(props) => (props.selected && css `
     background-color: lightyellow;
-    cursor: pointer;
-  }
+  `)}
 `;
 
 const Wrapper = styled.div`
