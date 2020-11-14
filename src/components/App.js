@@ -6,11 +6,12 @@ import styled from "styled-components";
 
 
 const Container = styled.div`
-width:100%;
+width:450px;
 height:700px;
 display: flex;
 justify-content:center;
 align-items:center;
+margin:auto;
 `;
 
 
