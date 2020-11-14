@@ -4,7 +4,7 @@ import styled from 'styled-components';
 
 import App from './App';
 
-Exerconst Container = styled.div`
+const Container = styled.div`
     display: flex;
     flex-direction: column;
 `
@@ -38,11 +38,10 @@ const Suggestion = styled.li`
 `
 
 const SuggestionContainer = styled.ul` 
-    &:hover {
-        box-shadow: 2px 2px 8px 8px lightgrey;
-        border-radius: 5px;
-        padding: 10px;
-    }
+    box-shadow: 2px 2px 8px 8px lightgrey;
+    border-radius: 5px;
+    padding: 10px;
+
 `
 
 const Typeahead = ({ suggestions, handleSelect }) => {
@@ -55,6 +54,7 @@ const Typeahead = ({ suggestions, handleSelect }) => {
         } 
         return [];
     }
+
 
     return (
         <Container>
@@ -75,6 +75,7 @@ const Typeahead = ({ suggestions, handleSelect }) => {
                 />
                 <Button onClick={() => setValue('')}>Clear</Button>
             </div>
+            {matchedSuggestions.length > 0 &&
             <SuggestionContainer>
                 {matchedSuggestions.map((suggestion) => {
                     return (
@@ -86,7 +87,8 @@ const Typeahead = ({ suggestions, handleSelect }) => {
                         </Suggestion>
                     );
                 })}
-            </SuggestionContainer>
+            </SuggestionContainer> 
+            }
             
         </Container>
     )
