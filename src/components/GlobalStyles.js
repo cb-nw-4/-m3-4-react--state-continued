@@ -1,10 +1,10 @@
 /*
-  It's common when using styled-components to create a single "GlobalStyles"
-  component that holds app-wide styles.
+    It's common when using styled-components to create a single "GlobalStyles"
+    component that holds app-wide styles.
 
-  In this case, we use it to apply a CSS Reset—removing most of the default
-  styles from most elements, ensuring things render equally across all
-  browsers. We also add a few conveniences, like box-sizing: border-box.
+    In this case, we use it to apply a CSS Reset—removing most of the default
+    styles from most elements, ensuring things render equally across all
+    browsers. We also add a few conveniences, like box-sizing: border-box.
  */
 import { createGlobalStyle } from 'styled-components';
 
