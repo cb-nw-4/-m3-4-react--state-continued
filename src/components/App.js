@@ -14,8 +14,6 @@ const Wrapper = styled.div`
   align-items: center;
 `
 
-
-
 const App = (props) => {
 
   return (
