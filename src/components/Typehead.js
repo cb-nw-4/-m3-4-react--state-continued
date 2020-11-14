@@ -39,9 +39,9 @@ const Suggestion = styled.li`
     width: 19vw;
     padding: 10px;
 
-    &:hover{
+    /* &:hover{
         background-color: #FFFBE6;
-    }
+    } */
 
     & span {
         font-weight: bold;
@@ -50,12 +50,14 @@ const Suggestion = styled.li`
     & .category{
         color: purple;
         font-size: 0.8em;
+        font-style: italic;
     }
 `;
 
 
-const Typehead = ({ suggestions, handleSelect }) => {
+const Typehead = ({ suggestions, handleSelect, categories }) => {
     const [value, setValue] = React.useState('');
+    const [suggestionIndex, setSuggestionIndex] = React.useState(0);
     const matchedSuggestions = (value.length > 1 ? suggestions.filter((suggestion) => suggestion.title.toLowerCase().includes(value.toLowerCase())) : [])
 
     return(
@@ -66,26 +68,46 @@ const Typehead = ({ suggestions, handleSelect }) => {
             value={value}
             onChange={(event) => setValue(event.target.value)}
             onKeyDown={(event) => {
-                if (event.key === 'Enter') {
-                    handleSelect(event.target.value);
+                switch(event.key){
+                    case "Enter": {
+                        handleSelect(event.target.value);
+                        return;
+                    }
+                    case "ArrowUp": {
+                        if(suggestionIndex > 0) {
+                            setSuggestionIndex(suggestionIndex - 1);
+                        } 
+                            return;
+                    }
+                    case "ArrowDown": {
+                        if(matchedSuggestions.length - 1 > suggestionIndex)
+                        setSuggestionIndex(suggestionIndex + 1);
+                    }
+                    return;
                 }
             }}
         />
         <button onClick={() => setValue('')}>Clear</button>
         </div>
         <ul>
-            {matchedSuggestions.map((suggestion) => {
-                const sliceIndex = suggestion.title.toLowerCase().indexOf(value.toLowerCase());
-                const firstPart = suggestion.title.slice(0, sliceIndex + value.length);
-                const secondPart = suggestion.title.slice(sliceIndex + value.length);
-                const category = suggestion.categoryId;
+            {matchedSuggestions.map((suggestion, i) => {
+                const slicedIndex = suggestion.title.toLowerCase().indexOf(value.toLowerCase());
+                const firstPart = suggestion.title.slice(0, slicedIndex + value.length);
+                const secondPart = suggestion.title.slice(slicedIndex + value.length);
+                const isSelected = (matchedSuggestions.indexOf(suggestion) === suggestionIndex ? true : false);
 
                 return (
                     <Suggestion
                         key={suggestion.id}
                         onClick={() => handleSelect(suggestion.title)}
+                        style={{
+                            background: isSelected ? 'hsla(50deg, 100%, 80%, 0.25)' : 'transparent'
+                        }}
+                        onMouseEnter={() => {
+                            setSuggestionIndex(i);
+                        }}
                     >
-                        {firstPart} <span>{secondPart}</span> <span className='category'>in {categories[category].name}</span>
+                        {firstPart} <span>{secondPart}</span> <span className='category'>in {categories[suggestion.categoryId].name}</span>
                     </Suggestion>
                 )
             })}
