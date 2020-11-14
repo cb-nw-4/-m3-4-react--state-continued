@@ -4,6 +4,7 @@ import styled, { css } from "styled-components";
 export const Typeahead = ({ suggestions, handleSelect, category }) => {
   const [InputText, setInputText] = useState("");
   const [selectedSuggestionIndex, setSelectedSuggestionIndex] = useState(0);
+  const [escaped, setEscaped] = useState(0)
   const filteredArr = suggestions.filter((book) => {
     const bookLowerCase = book.title.toLowerCase();
     const typedLowerCase = InputText.toLowerCase();
@@ -21,6 +22,7 @@ export const Typeahead = ({ suggestions, handleSelect, category }) => {
           type="text"
           onChange={(ev) => {
             setInputText(ev.target.value);
+            setEscaped(0)
           }}
           onKeyDown={(ev) => {
             switch (ev.key) {
@@ -40,13 +42,17 @@ export const Typeahead = ({ suggestions, handleSelect, category }) => {
                 }
                 return;
               }
+              case "Escape": {
+                setEscaped(1)
+              }
+              return;
             }
           }}
         ></Input>
         <Button onClick={() => setInputText("")}>Clear</Button>
       </ButtonWrapper>
       {InputText.length > 1 && filteredArr.length > 0 && (
-        <Ul>
+        <Ul noBooks={escaped === 1}>
           {filteredArr.map((book, i) => {
             const wordIndex = book.title
               .toLowerCase()
@@ -54,7 +60,6 @@ export const Typeahead = ({ suggestions, handleSelect, category }) => {
             const firstHalf = book.title.slice(0, wordIndex + InputText.length);
             const secondHalf = book.title.slice(wordIndex + InputText.length);
             const categoryBookId = book.categoryId;
-            console.log(selectedSuggestionIndex, i);
             return (
               <Li
                 selected={selectedSuggestionIndex === i}
@@ -89,7 +94,7 @@ const Italics = styled.span`
   }
 `;
 
-const Span = styled.span`
+const Span = styled.span` 
   font-weight: bold;
 `;
 
@@ -100,6 +105,11 @@ const Ul = styled.ul`
   padding: 1rem;
   margin: auto 0;
   width: 50%;
+  ${(props) => {
+    return props.noBooks && css`
+      display: none;
+    `
+  }}
 `;
 
 const Li = styled.li`
