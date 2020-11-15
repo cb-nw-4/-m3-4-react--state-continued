@@ -18,6 +18,7 @@ const Input = styled.input`
 const List = styled.ul`
     position: absolute;
     top: 45px;    
+    width: 100%;
     box-shadow: 1px 3px 7px 3px #D3D3D3;
     margin-bottom: 20px;   
    
@@ -55,7 +56,8 @@ const Typeahead = ({suggestions, handleSelect})=> {
                 }
                 }}
             />
-            <Button onClick={()=>(setValue(""))}>Clear</Button>       
+            <Button onClick={()=>(setValue(""))}>Clear</Button> 
+           { matchedSuggestions.length > 0 &&      
             <List>
                 {matchedSuggestions.map((suggestion)=>{               
                     return (
@@ -67,7 +69,7 @@ const Typeahead = ({suggestions, handleSelect})=> {
                         </li>
                     );
                 })}
-            </List>       
+            </List>}       
         </Wrapper>
     );
 };
