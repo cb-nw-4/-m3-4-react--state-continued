@@ -28,11 +28,7 @@ const List = styled.ul`
    li {
        padding: 10px;
        cursor: pointer;         
-   }
-
-   li:hover {
-        background-color: Cornsilk;
-   }
+   }  
 `;
 
 const Wrapper = styled.div`
@@ -53,12 +49,16 @@ const Category = styled.span`
 `;
 const Typeahead = ({suggestions, handleSelect})=> {
     const [value, setValue] = useState("");   
+    const [selectedSuggestionIndex, setSelectedSuggestionIndex] = React.useState(0);
 
     const matchedSuggestions = suggestions.filter((suggestion)=>{
             const suggestiontitle = suggestion.title.toLowerCase();            
             return value.length > 1 && suggestiontitle.search(value.toLowerCase()) !== -1;
-        });      
-       
+        }); 
+ 
+    if (matchedSuggestions.length > 0 && selectedSuggestionIndex > matchedSuggestions.length -1)
+        setSelectedSuggestionIndex(matchedSuggestions.length -1);
+           
     return (
         <Wrapper>     
             <Input
@@ -66,22 +66,41 @@ const Typeahead = ({suggestions, handleSelect})=> {
                 value= {value}
                 onChange={(ev)=>(setValue(ev.target.value))}
                 onKeyDown={(ev) => {
-                    if (ev.key === 'Enter') {
-                        handleSelect(ev.target.value);
-                }
-                }}
+                    switch (ev.key) {
+                        case "Enter": {
+                            handleSelect(matchedSuggestions.length > 0 ? matchedSuggestions[selectedSuggestionIndex].title : ev.target.value);
+                            return;
+                        }
+                        case "ArrowUp": {
+                            if ( matchedSuggestions.length > 0 && selectedSuggestionIndex > 0)
+                                setSelectedSuggestionIndex(selectedSuggestionIndex - 1);
+                            break;
+                        }
+                        case "ArrowDown": {
+                            if (matchedSuggestions.length > 0 && selectedSuggestionIndex < matchedSuggestions.length - 1)
+                                setSelectedSuggestionIndex(selectedSuggestionIndex + 1);
+                            break;
+                        }
+                        default:
+                            break;
+                }}}
             />
-            <Button onClick={()=>(setValue(""))}>Clear</Button> 
-           { matchedSuggestions.length > 0 &&      
+            <Button onClick={()=>{ setValue("")}}>Clear</Button> 
+            { matchedSuggestions.length > 0 &&      
             <List>
-                {matchedSuggestions.map((suggestion)=>{       
+                {matchedSuggestions.map((suggestion, index)=>{       
                     const jonctionIndex = suggestion.title.toLowerCase().indexOf(value.toLowerCase()) + value.length;
                     const firstHalf = suggestion.title.slice(0, jonctionIndex);
                     const secondHalf = suggestion.title.slice(jonctionIndex);
+                    const isSelected = selectedSuggestionIndex === index;
                     return (
                         <li 
                             key={suggestion.id} 
-                            onClick={(ev)=>(handleSelect(suggestion.title))}
+                            onClick={()=>(handleSelect(suggestion.title))}
+                            onMouseEnter={()=>(setSelectedSuggestionIndex(index))}
+                            style={{
+                                background: isSelected ? 'hsla(50deg, 100%, 80%, 0.25)' : 'transparent',
+                            }}
                         >
                             <span>
                                 {firstHalf}
