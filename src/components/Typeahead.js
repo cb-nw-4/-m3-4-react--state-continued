@@ -36,6 +36,10 @@ const Wrapper = styled.div`
     position: relative;
 `;
 
+const Prediction = styled.span`
+  font-weight: bold;
+`;
+
 const Typeahead = ({suggestions, handleSelect})=> {
     const [value, setValue] = useState("");   
 
@@ -59,13 +63,19 @@ const Typeahead = ({suggestions, handleSelect})=> {
             <Button onClick={()=>(setValue(""))}>Clear</Button> 
            { matchedSuggestions.length > 0 &&      
             <List>
-                {matchedSuggestions.map((suggestion)=>{               
+                {matchedSuggestions.map((suggestion)=>{       
+                    const jonctionIndex = suggestion.title.toLowerCase().indexOf(value.toLowerCase()) + value.length;
+                    const firstHalf = suggestion.title.slice(0, jonctionIndex);
+                    const secondHalf = suggestion.title.slice(jonctionIndex);
                     return (
                         <li 
                             key={suggestion.id} 
                             onClick={(ev)=>(handleSelect(suggestion.title))}
                         >
-                            {suggestion.title}
+                            <span>
+                                {firstHalf}
+                                <Prediction>{secondHalf}</Prediction>
+                            </span>
                         </li>
                     );
                 })}
