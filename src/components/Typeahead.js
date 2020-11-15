@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import styled from "styled-components";
+import { categories } from '../data';
 
 const Button = styled.button`
     padding: 10px 20px;
@@ -12,15 +13,17 @@ const Button = styled.button`
 
 const Input = styled.input`
     height: 35px;
-    width: 290px;
+    width: 295px;
+    padding: 5px;
     border: solid 1px lightgray;
 `;
 const List = styled.ul`
     position: absolute;
     top: 45px;    
-    width: 100%;
+    width: 100%;    
     box-shadow: 1px 3px 7px 3px #D3D3D3;
     margin-bottom: 20px;   
+    line-height: normal;
    
    li {
        padding: 10px;
@@ -37,9 +40,17 @@ const Wrapper = styled.div`
 `;
 
 const Prediction = styled.span`
-  font-weight: bold;
+    font-weight: bold;
 `;
 
+const Category = styled.span`   
+    font-size: 14px;
+    font-style: italic;   
+
+    span {
+        color: purple;
+    }
+`;
 const Typeahead = ({suggestions, handleSelect})=> {
     const [value, setValue] = useState("");   
 
@@ -47,7 +58,7 @@ const Typeahead = ({suggestions, handleSelect})=> {
             const suggestiontitle = suggestion.title.toLowerCase();            
             return value.length > 1 && suggestiontitle.search(value.toLowerCase()) !== -1;
         });      
-    
+       
     return (
         <Wrapper>     
             <Input
@@ -75,7 +86,8 @@ const Typeahead = ({suggestions, handleSelect})=> {
                             <span>
                                 {firstHalf}
                                 <Prediction>{secondHalf}</Prediction>
-                            </span>
+                                <Category> in <span>{categories[suggestion.categoryId].name}</span></Category>
+                            </span>                            
                         </li>
                     );
                 })}
