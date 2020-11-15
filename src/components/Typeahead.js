@@ -19,6 +19,12 @@ const Input = styled.input`
 
 const Typeahead = ({suggestions, handleSelect})=> {
     const [value, setValue] = useState("");
+
+    const matchedSuggestion = ()=>{
+        return suggestions.filter((book)=>{
+            
+        });
+    };
     
     return (
     <>
@@ -33,6 +39,9 @@ const Typeahead = ({suggestions, handleSelect})=> {
             }}
         />
         <Button onClick={()=>(setValue(""))}>Clear</Button>
+        <ul>
+
+        </ul>
      </>
  );
 };
