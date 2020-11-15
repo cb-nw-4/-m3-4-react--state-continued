@@ -36,14 +36,12 @@ const Wrapper = styled.div`
 `;
 
 const Typeahead = ({suggestions, handleSelect})=> {
-    const [value, setValue] = useState("");
+    const [value, setValue] = useState("");   
 
-    const matchedSuggestion = ()=>{
-        return suggestions.filter((book)=>{
-            const booktitle = book.title.toLowerCase();            
-            return value.length > 1 && booktitle.search(value.toLowerCase()) !== -1;
-        });       
-    };
+    const matchedSuggestions = suggestions.filter((suggestion)=>{
+            const suggestiontitle = suggestion.title.toLowerCase();            
+            return value.length > 1 && suggestiontitle.search(value.toLowerCase()) !== -1;
+        });      
     
     return (
         <Wrapper>     
@@ -59,9 +57,14 @@ const Typeahead = ({suggestions, handleSelect})=> {
             />
             <Button onClick={()=>(setValue(""))}>Clear</Button>       
             <List>
-                {matchedSuggestion().map((book)=>{               
+                {matchedSuggestions.map((suggestion)=>{               
                     return (
-                        <li key={book.id}>{book.title}</li>
+                        <li 
+                            key={suggestion.id} 
+                            onClick={(ev)=>(handleSelect(suggestion.title))}
+                        >
+                            {suggestion.title}
+                        </li>
                     );
                 })}
             </List>       
