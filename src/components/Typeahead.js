@@ -4,6 +4,8 @@ import styled from 'styled-components';
 
 import App from './App';
 
+import data from '../data';
+
 const Container = styled.div`
     display: flex;
     flex-direction: column;
@@ -41,10 +43,18 @@ const SuggestionContainer = styled.ul`
     box-shadow: 2px 2px 8px 8px lightgrey;
     border-radius: 5px;
     padding: 10px;
-
 `
 
-const Typeahead = ({ suggestions, handleSelect }) => {
+const Prediction = styled.span`
+  font-weight: bold;
+`
+
+const Genre = styled.span` 
+    color: purple;
+    font-style: italic;
+`
+
+const Typeahead = ({ suggestions, handleSelect, categories }) => {
     const [value, setValue] = useState('');
     const [matchedSuggestions, setMatchedSuggestions] = useState([]);   
 
@@ -54,7 +64,6 @@ const Typeahead = ({ suggestions, handleSelect }) => {
         } 
         return [];
     }
-
 
     return (
         <Container>
@@ -78,18 +87,27 @@ const Typeahead = ({ suggestions, handleSelect }) => {
             {matchedSuggestions.length > 0 &&
             <SuggestionContainer>
                 {matchedSuggestions.map((suggestion) => {
+                    let index = suggestion.title.toLowerCase().indexOf(value.toLowerCase());
+                    let firstHalf = suggestion.title.slice(0, (index + value.length))
+                    let secondHalf = suggestion.title.slice(index + value.length);
+                    let categories = data.categories; 
                     return (
                         <Suggestion
                             key={suggestion.id}
                             onClick={() => handleSelect(suggestion.title)}
                         >
-                            {suggestion.title}
+                            <span>
+                                {firstHalf}
+                                <Prediction>{secondHalf}</Prediction>
+                                <em> in </em>
+                                <Genre>{categories[suggestion.categoryId].name}</Genre>
+                            </span>       
+                                    
                         </Suggestion>
                     );
                 })}
             </SuggestionContainer> 
-            }
-            
+            }  
         </Container>
     )
 }
