@@ -1,5 +1,9 @@
-import React, { useState } from "react";
+import React from "react";
 import styled from 'styled-components';
+
+const InputContainer = styled.div`
+  display: inline;
+`;
 
 const Input = styled.input`
   width: 250px;
@@ -29,14 +33,13 @@ const Button = styled.button`
 `;
 
 const Typeahead = (props) => {
-  const [userInput, setUserInput] = useState('');
 
   const handleClick = () => {
-    setUserInput('');
+    props.setUserInput('');
   }
 
   const handleInput = (event) => {
-    setUserInput(event.target.value)
+    props.setUserInput(event.target.value)
   }
 
   const handleKeyPress = (event) => {
@@ -46,10 +49,10 @@ const Typeahead = (props) => {
   }
 
   return (
-    <>
-      <Input type="text" onKeyDown={handleKeyPress} onChange={handleInput} value={userInput}/>
+    <InputContainer>
+      <Input type="text" onKeyDown={handleKeyPress} onChange={handleInput} value={props.userInput}/>
       <Button onClick={handleClick}>Clear</Button>
-    </>
+    </InputContainer>
   );
 }
 
