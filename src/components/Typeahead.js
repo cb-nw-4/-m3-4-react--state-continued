@@ -4,7 +4,7 @@ import styled, { css } from "styled-components";
 export const Typeahead = ({ suggestions, handleSelect, category }) => {
   const [InputText, setInputText] = useState("");
   const [selectedSuggestionIndex, setSelectedSuggestionIndex] = useState(0);
-  const [escaped, setEscaped] = useState(0)
+  const [escaped, setEscaped] = useState(0);
   const filteredArr = suggestions.filter((book) => {
     const bookLowerCase = book.title.toLowerCase();
     const typedLowerCase = InputText.toLowerCase();
@@ -13,7 +13,6 @@ export const Typeahead = ({ suggestions, handleSelect, category }) => {
       return true;
     }
   });
-
   return (
     <Wrapper>
       <ButtonWrapper>
@@ -22,12 +21,12 @@ export const Typeahead = ({ suggestions, handleSelect, category }) => {
           type="text"
           onChange={(ev) => {
             setInputText(ev.target.value);
-            setEscaped(0)
+            setEscaped(0);
           }}
           onKeyDown={(ev) => {
             switch (ev.key) {
               case "Enter": {
-                handleSelect(ev.target.value);
+                handleSelect(filteredArr[selectedSuggestionIndex].title);
                 return;
               }
               case "ArrowUp": {
@@ -42,10 +41,11 @@ export const Typeahead = ({ suggestions, handleSelect, category }) => {
                 }
                 return;
               }
-              case "Escape": {
-                setEscaped(1)
-              }
-              return;
+              case "Escape":
+                {
+                  setEscaped(1);
+                }
+                return;
             }
           }}
         ></Input>
@@ -94,7 +94,7 @@ const Italics = styled.span`
   }
 `;
 
-const Span = styled.span` 
+const Span = styled.span`
   font-weight: bold;
 `;
 
@@ -106,9 +106,12 @@ const Ul = styled.ul`
   margin: auto 0;
   width: 50%;
   ${(props) => {
-    return props.noBooks && css`
-      display: none;
-    `
+    return (
+      props.noBooks &&
+      css`
+        display: none;
+      `
+    );
   }}
 `;
 
