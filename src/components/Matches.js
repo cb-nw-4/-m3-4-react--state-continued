@@ -21,14 +21,33 @@ const Li = styled.li`
   }
 `;
 
+const Prediction = styled.span`
+  font-weight: bold;
+`;
+
+const Category = styled.span`
+  font-size: smaller;
+  font-style: italic;
+`;
+
+const ColorStyle = styled.span`
+  color: purple;
+`;
+
 const Matches = (props) => {
   if (props.userInput.length > 1) {
     return (
       <BooksContainer>
         <Ul>
           {props.suggestions.filter(book => book.title.toLowerCase().indexOf(props.userInput.toLowerCase()) !== -1).map(item => {
-            return <Li key={item.id} onClick={props.handleSelect}>{item.title}</Li>
-          })}
+            const titlePart1 = item.title.slice(0, item.title.toLowerCase().indexOf(props.userInput.toLowerCase()) + props.userInput.length);
+            const titlePart2 = item.title.slice(item.title.toLowerCase().indexOf(props.userInput.toLowerCase()) + props.userInput.length, item.title.length);
+            return (
+              <Li key={item.id} onClick={props.handleSelect} id={item.title}>
+                {titlePart1}<Prediction>{titlePart2} </Prediction>
+                <Category>in <ColorStyle>{props.categories[item.categoryId].name}</ColorStyle></Category>
+              </Li>
+          );})}
         </Ul>
       </BooksContainer>
     );

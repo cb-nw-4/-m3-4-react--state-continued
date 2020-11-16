@@ -30,9 +30,10 @@ const App = (props) => {
         />
         <Matches
           suggestions={data.books}
+          categories={data.categories}
           userInput={userInput}
           handleSelect={(event) => {
-            window.alert(event.target.innerHTML)
+            window.alert(event.currentTarget.id);
           }}
         />
       </Wrapper>
