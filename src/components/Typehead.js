@@ -5,52 +5,71 @@ import { categories } from '../data';
 
 const Typehead=({ suggestions, handleSelect })=>{
     const [value, setValue]=useState('');
-    //console.log(suggestions[2].title);
+    const [selectedSuggestionIndex, setSelectedSuggestionIndex] = useState(0);
+    let selectedTitle='';
     const filteredArr=suggestions.filter(el=>{
         let newTitle=el.title.toLowerCase();
-        //console.log(newTitle);
         if(value.length>=2){
-            //console.log(newTitle.includes(value));
             return newTitle.includes(value);
         }
     });
-    //console.log(filteredArr);
     return(
         <Wrapper>
             <Field  type="text"
                     value={value}
                     onChange={(ev) => setValue(ev.target.value)}
                     onKeyDown={(ev) => {
-                        if (ev.key === 'Enter') {
-                            handleSelect(ev.target.value);
+                        switch (ev.key) {
+                            case "Enter": {
+                                //handleSelect(selectedTitle);
+                                setValue(selectedTitle);
+                                return;
+                            }
+                            case "ArrowUp": {
+                                setSelectedSuggestionIndex(selectedSuggestionIndex - 1);
+                                console.log(selectedSuggestionIndex);
+                                return;
+                            }
+                            case "ArrowDown": {
+                                setSelectedSuggestionIndex(selectedSuggestionIndex + 1);
+                                console.log(selectedSuggestionIndex);
+                                return;
+                            }
                         }
                     }}
             />
             <Button onClick={() => setValue('')}>Clear</Button>
             {value.length>1 && ( <List>
-                {filteredArr.map((el)=>{
+                {filteredArr.map((el, index)=>{
                     let newTitle=el.title.toLowerCase();
                     let getIndex=newTitle.indexOf(value)+value.length;
                     let firstpart=el.title.slice(0,getIndex);
                     let secondpart=el.title.slice(getIndex);
-                    console.log(newTitle);
                     let category=el.categoryId;
-                    console.log(categories[category].name);
+                    const isSelected=index===selectedSuggestionIndex;
+                    if(isSelected===true){
+                        selectedTitle=el.title;
+                    }
                     return(
-                        <NewList
-                        onKeyDown={(ev)=>{
-                            console.log(ev)
+                        <Suggestion
+                        style={{
+                            background: isSelected ? '#FFFDCA' : 'transparent',
                         }}
+
                         onClick={()=> setValue(el.title)}
                         key={el.id}>
-                            <span>{firstpart}</span>
-                            <span><strong>{secondpart} </strong></span>
+                            <span>
+                                {firstpart}
+                            </span>
+                            <span><strong>
+                                {secondpart} 
+                            </strong></span>
                             <Category><i> 
                                 in <Text>
                                         {categories[category].name}
                                     </Text>
                             </i></Category>
-                        </NewList>
+                        </Suggestion>
                     );
                 })}
             </List>)}
@@ -98,15 +117,16 @@ const List=styled.ul`
     position: absolute;
     max-height: 300px;
     overflow: auto;
+    scroll-behavior:auto;
 `;
 
-const NewList=styled.li`
+const Suggestion=styled.li`
     padding:10px;
     font-size:15px;
-    &:hover{
+    /* &:hover{
         background-color:#FFFDCA;
         cursor:pointer
-    }
+    } */
     line-height:1.2;
 `;
 
