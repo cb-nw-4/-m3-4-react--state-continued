@@ -2,8 +2,6 @@ import React, { useState } from 'react';
 
 import styled from 'styled-components';
 
-import App from './App';
-
 import data from '../data';
 
 const Container = styled.div`
@@ -54,9 +52,10 @@ const Genre = styled.span`
     font-style: italic;
 `
 
-const Typeahead = ({ suggestions, handleSelect, categories }) => {
+const Typeahead = ({ suggestions, handleSelect }) => {
     const [value, setValue] = useState('');
-    const [matchedSuggestions, setMatchedSuggestions] = useState([]);   
+    const [matchedSuggestions, setMatchedSuggestions] = useState([]);
+    const [selectedSuggestionIndex, setSelectedSuggestionIndex] = useState(0);
 
     const getMatches = (suggestions, newValue) => {
         if (newValue.length > 1) {
@@ -64,6 +63,7 @@ const Typeahead = ({ suggestions, handleSelect, categories }) => {
         } 
         return [];
     }
+    
 
     return (
         <Container>
@@ -77,8 +77,18 @@ const Typeahead = ({ suggestions, handleSelect, categories }) => {
                     setMatchedSuggestions(getMatches(suggestions, newValue));
                 }}
                 onKeyDown={(ev) => {
-                    if (ev.key === 'Enter') {
-                        handleSelect(ev.target.value);
+                    switch(ev.key) {
+                        case "Enter": {
+                            handleSelect(matchedSuggestions[selectedSuggestionIndex].title);
+                            return;
+                        }
+                        case "ArrowUp": {
+                            setSelectedSuggestionIndex(selectedSuggestionIndex -1);
+                            return;
+                        }
+                        case "ArrowDown": {
+                            setSelectedSuggestionIndex(selectedSuggestionIndex + 1);
+                        }
                     }
                 }}
                 />
@@ -86,23 +96,26 @@ const Typeahead = ({ suggestions, handleSelect, categories }) => {
             </div>
             {matchedSuggestions.length > 0 &&
             <SuggestionContainer>
-                {matchedSuggestions.map((suggestion) => {
+                {matchedSuggestions.map((suggestion, i) => {
                     let index = suggestion.title.toLowerCase().indexOf(value.toLowerCase());
-                    let firstHalf = suggestion.title.slice(0, (index + value.length))
+                    let firstHalf = suggestion.title.slice(0, (index + value.length));
                     let secondHalf = suggestion.title.slice(index + value.length);
                     let categories = data.categories; 
+                    const isSelected = selectedSuggestionIndex === i;
+                    console.log(suggestion.title);
                     return (
                         <Suggestion
                             key={suggestion.id}
                             onClick={() => handleSelect(suggestion.title)}
+                            onMouseEnter={() => setSelectedSuggestionIndex(i)}
+                            style={{ background: isSelected ? 'hsla(50deg, 100%, 80%, 0.25)' : 'transparent', }}
                         >
                             <span>
                                 {firstHalf}
                                 <Prediction>{secondHalf}</Prediction>
                                 <em> in </em>
                                 <Genre>{categories[suggestion.categoryId].name}</Genre>
-                            </span>       
-                                    
+                            </span>          
                         </Suggestion>
                     );
                 })}
