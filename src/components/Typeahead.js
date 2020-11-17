@@ -69,14 +69,12 @@ const Typeahead = ({ suggestions, handleSelect, categories }) => {
                     case 38: {
                         if (selectedSuggestionIndex > 0 && filteredSuggestions.length > 0 && searchBook.length > 0) {
                             setSelectedSuggestionIndex(selectedSuggestionIndex - 1);
-                            console.log(selectedSuggestionIndex);
                         }
                         return;
                     }
                     case 40: {
                         if (filteredSuggestions.length > 0 && searchBook.length > 0) {
                             setSelectedSuggestionIndex(selectedSuggestionIndex + 1);
-                            console.log(selectedSuggestionIndex);
                         }
                         return;
                     }
