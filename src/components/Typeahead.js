@@ -24,10 +24,10 @@ const List = styled.ul`
     box-shadow: 1px 3px 7px 3px #D3D3D3;
     margin-bottom: 20px;   
     line-height: normal;
-   
+  
    li {
        padding: 10px;
-       cursor: pointer;         
+       cursor: pointer;   
    }  
 `;
 
@@ -47,38 +47,53 @@ const Category = styled.span`
         color: purple;
     }
 `;
+
 const Typeahead = ({suggestions, handleSelect})=> {
     const [value, setValue] = useState("");   
     const [selectedSuggestionIndex, setSelectedSuggestionIndex] = React.useState(0);
+    const [isEscaped, setIsEscaped] = useState(false); 
+
 
     const matchedSuggestions = suggestions.filter((suggestion)=>{
             const suggestiontitle = suggestion.title.toLowerCase();            
             return value.length > 1 && suggestiontitle.search(value.toLowerCase()) !== -1;
-        }); 
+        });
+        
+    const isListShown = !isEscaped && matchedSuggestions.length > 0;   
  
-    if (matchedSuggestions.length > 0 && selectedSuggestionIndex > matchedSuggestions.length -1)
+    if (isListShown && selectedSuggestionIndex > matchedSuggestions.length -1)
         setSelectedSuggestionIndex(matchedSuggestions.length -1);
+
+    const handleOnChanged = (ev) => {
+        setValue(ev.target.value);
+        if (isEscaped)
+            setIsEscaped(false);
+    };
            
     return (
         <Wrapper>     
             <Input
                 type="text"
                 value= {value}
-                onChange={(ev)=>(setValue(ev.target.value))}
+                onChange={(ev)=>(handleOnChanged(ev))}                
                 onKeyDown={(ev) => {
                     switch (ev.key) {
-                        case "Enter": {
-                            handleSelect(matchedSuggestions.length > 0 ? matchedSuggestions[selectedSuggestionIndex].title : ev.target.value);
-                            return;
+                        case "Enter": {                          
+                            handleSelect(isListShown ? matchedSuggestions[selectedSuggestionIndex].title : ev.target.value);
+                            break;
                         }
                         case "ArrowUp": {
-                            if ( matchedSuggestions.length > 0 && selectedSuggestionIndex > 0)
+                            if ( isListShown && selectedSuggestionIndex > 0)
                                 setSelectedSuggestionIndex(selectedSuggestionIndex - 1);
                             break;
                         }
                         case "ArrowDown": {
-                            if (matchedSuggestions.length > 0 && selectedSuggestionIndex < matchedSuggestions.length - 1)
+                            if (isListShown && selectedSuggestionIndex < matchedSuggestions.length - 1)
                                 setSelectedSuggestionIndex(selectedSuggestionIndex + 1);
+                            break;
+                        }
+                        case "Escape": {
+                            setIsEscaped(true);
                             break;
                         }
                         default:
@@ -86,7 +101,7 @@ const Typeahead = ({suggestions, handleSelect})=> {
                 }}}
             />
             <Button onClick={()=>{ setValue("")}}>Clear</Button> 
-            { matchedSuggestions.length > 0 &&      
+            { isListShown &&    
             <List>
                 {matchedSuggestions.map((suggestion, index)=>{       
                     const jonctionIndex = suggestion.title.toLowerCase().indexOf(value.toLowerCase()) + value.length;
@@ -97,7 +112,7 @@ const Typeahead = ({suggestions, handleSelect})=> {
                         <li 
                             key={suggestion.id} 
                             onClick={()=>(handleSelect(suggestion.title))}
-                            onMouseEnter={()=>(setSelectedSuggestionIndex(index))}
+                            onMouseEnter={()=>(setSelectedSuggestionIndex(index))}                           
                             style={{
                                 background: isSelected ? 'hsla(50deg, 100%, 80%, 0.25)' : 'transparent',
                             }}
