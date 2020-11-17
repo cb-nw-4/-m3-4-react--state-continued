@@ -10,29 +10,36 @@ const Typehead=({ suggestions, handleSelect })=>{
     const filteredArr=suggestions.filter(el=>{
         let newTitle=el.title.toLowerCase();
         if(value.length>=2){
+            //setSelectedSuggestionIndex(0);
             return newTitle.includes(value);
         }
     });
+
     return(
         <Wrapper>
             <Field  type="text"
                     value={value}
-                    onChange={(ev) => setValue(ev.target.value)}
+                    onChange={(ev) => {
+                        setSelectedSuggestionIndex(0);
+                        setValue(ev.target.value)
+                    }}
                     onKeyDown={(ev) => {
                         switch (ev.key) {
                             case "Enter": {
-                                //handleSelect(selectedTitle);
+                                handleSelect(selectedTitle);
                                 setValue(selectedTitle);
                                 return;
                             }
                             case "ArrowUp": {
-                                setSelectedSuggestionIndex(selectedSuggestionIndex - 1);
-                                console.log(selectedSuggestionIndex);
+                                if(selectedSuggestionIndex-1>=0){
+                                    setSelectedSuggestionIndex(selectedSuggestionIndex - 1);
+                                }
                                 return;
                             }
                             case "ArrowDown": {
-                                setSelectedSuggestionIndex(selectedSuggestionIndex + 1);
-                                console.log(selectedSuggestionIndex);
+                                if(selectedSuggestionIndex<filteredArr.length-1){
+                                    setSelectedSuggestionIndex(selectedSuggestionIndex + 1);
+                                }
                                 return;
                             }
                         }
@@ -46,29 +53,31 @@ const Typehead=({ suggestions, handleSelect })=>{
                     let firstpart=el.title.slice(0,getIndex);
                     let secondpart=el.title.slice(getIndex);
                     let category=el.categoryId;
-                    const isSelected=index===selectedSuggestionIndex;
+                    let isSelected=false;
+                    if(index===selectedSuggestionIndex){
+                        isSelected=true;
+                    };
                     if(isSelected===true){
                         selectedTitle=el.title;
                     }
                     return(
                         <Suggestion
-                        style={{
-                            background: isSelected ? '#FFFDCA' : 'transparent',
-                        }}
-
-                        onClick={()=> setValue(el.title)}
-                        key={el.id}>
-                            <span>
-                                {firstpart}
-                            </span>
-                            <span><strong>
-                                {secondpart} 
-                            </strong></span>
-                            <Category><i> 
-                                in <Text>
-                                        {categories[category].name}
-                                    </Text>
-                            </i></Category>
+                            style={{
+                                background: isSelected ? '#FFFDCA' : 'transparent',
+                            }}
+                            onClick={()=> setValue(el.title)}
+                            key={el.id}>
+                                <span>
+                                    {firstpart}
+                                </span>
+                                <span><strong>
+                                    {secondpart}  
+                                </strong></span>
+                                <Category><i> 
+                                    &nbsp;in <Text>
+                                            {categories[category].name}
+                                        </Text>
+                                </i></Category>
                         </Suggestion>
                     );
                 })}
@@ -123,10 +132,10 @@ const List=styled.ul`
 const Suggestion=styled.li`
     padding:10px;
     font-size:15px;
-    /* &:hover{
+    &:hover{
         background-color:#FFFDCA;
         cursor:pointer
-    } */
+    }
     line-height:1.2;
 `;
 
