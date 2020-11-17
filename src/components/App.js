@@ -1,8 +1,7 @@
-import React, { useState } from 'react';
+import React from 'react';
 import data from '../data';
 import GlobalStyles from './GlobalStyles';
 import Typeahead from './Typeahead';
-import Matches from './Matches';
 import styled from 'styled-components';
 
 const Wrapper = styled.div`
@@ -15,25 +14,15 @@ const Wrapper = styled.div`
 `;
 
 const App = (props) => {
-  const [userInput, setUserInput] = useState('');
-
   return (
     <>
       <GlobalStyles />
       <Wrapper>
         <Typeahead
-          handleSelect={(suggestion) => {
-            window.alert(suggestion)
-          }}
-          userInput={userInput}
-          setUserInput={setUserInput}
-        />
-        <Matches
           suggestions={data.books}
           categories={data.categories}
-          userInput={userInput}
-          handleSelect={(event) => {
-            window.alert(event.currentTarget.id);
+          handleSelect={(suggestion) => {
+            window.alert(suggestion)
           }}
         />
       </Wrapper>
