@@ -62,6 +62,7 @@ const Typehead=({ suggestions, handleSelect })=>{
                     }
                     return(
                         <Suggestion
+                            onMouseEnter={()=>{setSelectedSuggestionIndex(index)}}
                             style={{
                                 background: isSelected ? '#FFFDCA' : 'transparent',
                             }}
