@@ -21,6 +21,7 @@ const App = (props) => {
     <Container>
       <GlobalStyles />
       <Typeahead
+      categories={data.categories}
       suggestions={data.books}
       handleSelect={(suggestion) => {
         window.alert(suggestion)
